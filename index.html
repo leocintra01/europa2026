@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Europa 2026 · Natalia</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F8F6F1;
+    --ink: #1C1C1C;
+    --ink-light: #6B6B6B;
+    --accent: #C4A882;
+    --accent-dark: #8B6E4E;
+    --ams: #1B5E8A;
+    --bxl: #7B3F3F;
+    --par: #2D6B3A;
+    --white: #FFFFFF;
+    --border: #E8E4DC;
+    --tag-bg: #F0EDE6;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Mono', monospace;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    font-size: 13px;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 3rem 2rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header-line {
+    width: 40px;
+    height: 1px;
+    background: var(--accent);
+    margin-bottom: 1.5rem;
+  }
+
+  .header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .header h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .header-meta {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: #999;
+    text-transform: uppercase;
+  }
+
+  .header-meta span { color: var(--accent); }
+
+  /* NAV */
+  .nav {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    background: var(--white);
+    overflow-x: auto;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .nav-btn {
+    padding: 1rem 1.5rem;
+    border: none;
+    background: transparent;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .nav-btn.active {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+  }
+
+  .nav-btn:hover { color: var(--ink); }
+
+  /* SECTIONS */
+  .section { display: none; padding: 2rem; max-width: 900px; margin: 0 auto; }
+  .section.active { display: block; }
+
+  /* CITY BADGE */
+  .city-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 2px;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin-bottom: 2rem;
+  }
+
+  .city-badge.ams { background: #EAF2F8; color: var(--ams); }
+  .city-badge.bxl { background: #F5EBEB; color: var(--bxl); }
+  .city-badge.par { background: #EAF2EB; color: var(--par); }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    margin-bottom: 0.25rem;
+    letter-spacing: -0.01em;
+  }
+
+  .section-subtitle {
+    font-size: 11px;
+    color: var(--ink-light);
+    letter-spacing: 0.05em;
+    margin-bottom: 2rem;
+  }
+
+  /* HOTEL CARD */
+  .hotel-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .hotel-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-bottom: 0.25rem;
+    grid-column: 1 / -1;
+  }
+
+  .hotel-detail {
+    font-size: 11px;
+    color: var(--ink-light);
+    line-height: 1.8;
+  }
+
+  .hotel-detail strong {
+    color: var(--ink);
+    font-weight: 400;
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.2rem;
+  }
+
+  /* DAY CARDS */
+  .day-grid { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 2rem; }
+
+  .day-row {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    background: var(--white);
+    min-height: 60px;
+  }
+
+  .day-header {
+    background: var(--ink);
+    color: var(--bg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .day-header .day-name {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.2rem;
+  }
+
+  .day-header .day-date {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 300;
+    line-height: 1;
+  }
+
+  .day-header .day-month {
+    font-size: 10px;
+    color: #888;
+    margin-top: 0.1rem;
+  }
+
+  .day-slots { display: flex; flex-direction: column; gap: 1px; background: var(--border); }
+
+  .slot {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    background: var(--white);
+    min-height: 50px;
+  }
+
+  .slot-time {
+    padding: 0.75rem 1rem;
+    font-size: 10px;
+    color: var(--ink-light);
+    letter-spacing: 0.05em;
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+  }
+
+  .slot-content {
+    padding: 0.75rem 1rem;
+    font-size: 12px;
+    line-height: 1.5;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .slot-content .tag {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    background: var(--tag-bg);
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  .slot-content .tag.confirmed {
+    background: #EAF2EB;
+    color: var(--par);
+  }
+
+  .slot-night { background: #FAFAF8; }
+  .slot-night .slot-time { color: #BBB; }
+
+  /* OVERVIEW TABLE */
+  .overview-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+    font-size: 11px;
+  }
+
+  .overview-table th {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    font-size: 10px;
+    text-transform: uppercase;
+  }
+
+  .overview-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+
+  .overview-table tr:nth-child(even) td { background: #FAFAF8; }
+
+  .dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: 0.4rem;
+    vertical-align: middle;
+  }
+
+  .dot.ams { background: var(--ams); }
+  .dot.bxl { background: var(--bxl); }
+  .dot.par { background: var(--par); }
+
+  /* TICKETS */
+  .ticket-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 2rem; }
+
+  .ticket-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: var(--white);
+  }
+
+  .ticket-name {
+    font-size: 13px;
+    margin-bottom: 0.2rem;
+  }
+
+  .ticket-meta {
+    font-size: 10px;
+    color: var(--ink-light);
+    letter-spacing: 0.05em;
+  }
+
+  .ticket-status {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.7rem;
+    white-space: nowrap;
+  }
+
+  .ticket-status.comprar { background: #FEF3E2; color: #9C6B00; }
+  .ticket-status.comprado { background: #EAF2EB; color: var(--par); }
+
+  .ticket-link {
+    font-size: 10px;
+    color: var(--accent-dark);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    margin-top: 0.2rem;
+    display: block;
+  }
+
+  .ticket-link:hover { text-decoration: underline; }
+
+  /* BUDGET */
+  .budget-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+
+  .budget-card {
+    background: var(--white);
+    padding: 1.5rem;
+  }
+
+  .budget-label {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin-bottom: 0.5rem;
+  }
+
+  .budget-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 300;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+
+  .budget-sub {
+    font-size: 10px;
+    color: var(--ink-light);
+  }
+
+  .budget-total .budget-value { color: var(--accent-dark); }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 2rem 0;
+  }
+
+  /* COMING SOON */
+  .coming-soon {
+    padding: 3rem 2rem;
+    text-align: center;
+    border: 1px dashed var(--border);
+    color: var(--ink-light);
+  }
+
+  .coming-soon .cs-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 300;
+    font-style: italic;
+    margin-bottom: 0.5rem;
+    color: var(--ink);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .header { padding: 2rem 1.25rem 1.5rem; }
+    .section { padding: 1.5rem 1.25rem; }
+    .hotel-card { grid-template-columns: 1fr; }
+    .day-row { grid-template-columns: 75px 1fr; }
+    .slot { grid-template-columns: 70px 1fr; }
+    .overview-table { font-size: 10px; }
+  }
+
+  /* ANIMATIONS */
+  .section.active > * {
+    animation: fadeUp 0.4s ease both;
+  }
+
+  .section.active > *:nth-child(2) { animation-delay: 0.05s; }
+  .section.active > *:nth-child(3) { animation-delay: 0.1s; }
+  .section.active > *:nth-child(4) { animation-delay: 0.15s; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-line"></div>
+  <h1>Europa <em>2026</em></h1>
+  <div class="header-meta">
+    <div>22 Mai → 08 Jun</div>
+    <div><span>Amsterdã</span> · <span>Bruxelas</span> · <span>Bruges</span> · <span>Paris</span></div>
+    <div>Natalia &amp; ✈</div>
+  </div>
+</header>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="show('visao-geral')">Visão Geral</button>
+  <button class="nav-btn" onclick="show('amsterda')">Amsterdã</button>
+  <button class="nav-btn" onclick="show('bruxelas')">Bruxelas · Bruges</button>
+  <button class="nav-btn" onclick="show('paris')">Paris</button>
+  <button class="nav-btn" onclick="show('ingressos')">Ingressos</button>
+  <button class="nav-btn" onclick="show('orcamento')">Orçamento</button>
+</nav>
+
+<!-- VISÃO GERAL -->
+<section id="visao-geral" class="section active">
+  <p class="section-subtitle">MAIO · JUNHO 2026</p>
+  <h2 class="section-title">Visão Geral da Viagem</h2>
+
+  <table class="overview-table">
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Cidade</th>
+        <th>Hotel</th>
+        <th>Destaque do Dia</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Sex 22/05</td>
+        <td>—</td>
+        <td>—</td>
+        <td>Voo GRU 21h45 · Embarque</td>
+      </tr>
+      <tr>
+        <td>Sáb 23/05</td>
+        <td><span class="dot ams"></span>Amsterdã</td>
+        <td>ibis Styles Central Station</td>
+        <td>Chegada · Dam Square · Leidseplein</td>
+      </tr>
+      <tr>
+        <td>Dom 24/05</td>
+        <td><span class="dot ams"></span>Amsterdã</td>
+        <td>ibis Styles Central Station</td>
+        <td>Barco elétrico · Bloemenmarkt · Red Light District</td>
+      </tr>
+      <tr>
+        <td>Seg 25/05</td>
+        <td><span class="dot ams"></span>Amsterdã</td>
+        <td>ibis Styles Central Station</td>
+        <td>Anne Frank · Jordaan · Heineken 16h45 ✅</td>
+      </tr>
+      <tr>
+        <td>Ter 26/05</td>
+        <td><span class="dot ams"></span>Amsterdã</td>
+        <td>ibis Styles Central Station</td>
+        <td>Van Gogh · Rijksmuseum · Barco iluminado</td>
+      </tr>
+      <tr>
+        <td>Qua 27/05</td>
+        <td><span class="dot ams"></span>Amsterdã</td>
+        <td>ibis Styles Central Station</td>
+        <td>Zaanse Schans · Zaandam · A'DAM Lookout 21h</td>
+      </tr>
+      <tr>
+        <td>Qui 28/05</td>
+        <td><span class="dot bxl"></span>Bruxelas</td>
+        <td>Atlas Hotel Brussels</td>
+        <td>Trem 9h20 · Chegada 11h30 · Grand Place</td>
+      </tr>
+      <tr>
+        <td>Sex 29/05</td>
+        <td><span class="dot bxl"></span>Bruges</td>
+        <td>Atlas Hotel Brussels</td>
+        <td>Excursão a Bruges (1h de trem)</td>
+      </tr>
+      <tr>
+        <td>Sáb 30/05</td>
+        <td><span class="dot par"></span>Paris</td>
+        <td>Grand Hotel Saint Michel</td>
+        <td>Trem 14h20 · Chegada Paris 15h40</td>
+      </tr>
+      <tr>
+        <td>Dom 31/05</td>
+        <td><span class="dot par"></span>Paris</td>
+        <td>Grand Hotel Saint Michel</td>
+        <td>A definir</td>
+      </tr>
+      <tr>
+        <td>Seg 01/06</td>
+        <td><span class="dot par"></span>Paris</td>
+        <td>Grand Hotel Saint Michel</td>
+        <td>A definir</td>
+      </tr>
+      <tr>
+        <td>Ter 02/06</td>
+        <td><span class="dot par"></span>Paris</td>
+        <td>Grand Hotel Saint Michel</td>
+        <td>A definir</td>
+      </tr>
+      <tr>
+        <td>Qua 03/06</td>
+        <td><span class="dot par"></span>Paris</td>
+        <td>Grand Hotel Saint Michel</td>
+        <td>A definir</td>
+      </tr>
+      <tr>
+        <td>Qui 04/06</td>
+        <td><span class="dot par"></span>Paris</td>
+        <td>Grand Hotel Saint Michel</td>
+        <td>A definir</td>
+      </tr>
+      <tr>
+        <td>Sex 05/06</td>
+        <td><span class="dot par"></span>Paris</td>
+        <td>Grand Hotel Saint Michel</td>
+        <td>A definir</td>
+      </tr>
+      <tr>
+        <td>Sáb 06/06</td>
+        <td><span class="dot par"></span>Paris</td>
+        <td>Grand Hotel Saint Michel</td>
+        <td>Voo Paris 23h30 → GRU</td>
+      </tr>
+      <tr>
+        <td>Dom 07/06</td>
+        <td>—</td>
+        <td>—</td>
+        <td>Chegada GRU manhã</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- AMSTERDÃ -->
+<section id="amsterda" class="section">
+  <div class="city-badge ams">🇳🇱 Amsterdã · 23–28 Mai</div>
+  <h2 class="section-title">Amsterdã</h2>
+  <p class="section-subtitle">5 NOITES · IBIS STYLES AMSTERDAM CENTRAL STATION</p>
+
+  <div class="hotel-card">
+    <div class="hotel-name">ibis Styles Amsterdam Central Station</div>
+    <div class="hotel-detail">
+      <strong>Endereço</strong>
+      Martelaarsgracht 10, Centro de Amsterdã
+    </div>
+    <div class="hotel-detail">
+      <strong>Check-in / Check-out</strong>
+      23/05 a partir das 15h · 28/05 até 12h
+    </div>
+    <div class="hotel-detail">
+      <strong>Confirmação</strong>
+      6702.776.985 · PIN: 5231
+    </div>
+    <div class="hotel-detail">
+      <strong>Valor</strong>
+      R$ 10.701 · Café da manhã incluído
+    </div>
+  </div>
+
+  <div class="day-grid">
+
+    <!-- SAB 23 -->
+    <div class="day-row">
+      <div class="day-header">
+        <div class="day-name">Sábado</div>
+        <div class="day-date">23</div>
+        <div class="day-month">Maio</div>
+      </div>
+      <div class="day-slots">
+        <div class="slot">
+          <div class="slot-time">8h–10h</div>
+          <div class="slot-content">Voo GRU → AMS</div>
+        </div>
+        <div class="slot">
+          <div class="slot-time">10h–12h</div>
+          <div class="slot-content">Voo GRU → AMS</div>
+        </div>
+        <div class="slot">
+          <div class="slot-time">Almoço</div>
+          <div class="slot-content">A bordo</div>
+        </div>
+        <div class="slot">
+          <div class="slot-time">Tarde</div>
+          <div class="slot-content">Chegada ~14h30 · Check-in · Descanso</div>
+        </div>
+        <div class="slot slot-night">
+          <div class="slot-time">Noite</div>
+          <div class="slot-content">Walk: Dam Square → Kalverstraat → Leidseplein</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOM 24 -->
+    <div class="day-row">
+      <div class="day-header">
+        <div class="day-name">Domingo</div>
+        <div class="day-date">24</div>
+        <div class="day-month">Maio</div>
+      </div>
+      <div class="day-slots">
+        <div class="slot">
+          <div class="slot-time">8h–10h</div>
+          <div class="slot-content">Bloemenmarkt — mercado flutuante de flores</div>
+        </div>
+        <div class="slot">
+          <div class="slot-time">10h–12h</div>
+          <div class="slot-content">Barco elétrico pelos canais <span class="tag confirmed">Reservar</span></div>
+        </div>
+        <div class="slot">
+          <div class="slot-time">Almoço</div>
+          <div class="slot-content">Albert Cuyp Markt — comida de rua</div>
+        </div>
+        <div class="slot">
+          <div class="slot-time">Tarde</div>
+          <div class="slot-content">Vondelpark + bairro De Pijp</div>
+        </div>
+        <div class="slot slot-night">
+          <div class="slot-time">Noite</div>
+          <div class="slot-content">Red Light District</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEG 25 -->
+    <div class="day-row">
+      <div class="day-header">
+        <div class="day-name">Segunda</div>
+        <div class="day-date">25</div>
+        <div class="day-month">Maio</div>
+      </div>
+      <div class="day-slots">
+        <div class="slot">
+          <div class="slot-time">8h–10h</div>
+          <div class="slot-content">Anne Frank House <span class="tag confirmed">Ingresso online obrigatório</span></div>
+        </div>
+        <div class="slot">
+          <div class="slot-time">10h–12h</div>
+          <div class="slot-content">Anne Frank House (continuação)</div>
+        </div>
+        <div class="slot">
+          <div class="slot-time">Almoço</div>
+          <div class="slot-content">Café no bairro de Jordaan</div>
+        </div>
+        <div class="slot">
+          <div class="slot-time">Tarde</div>
+          <div class="slot-content">Jordaan + Westerkerk + Negen Straatjes · <strong>16h45 Heineken Experience ✅</strong></div>
+        </div>
+        <div class="slot slot-night">
+          <div class="slot-time">Noite</div>
+          <div class="slot-content">Jantar no De Pijp + canais iluminados</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TER 26 -->
+    <div class="day-row">
+      <div class="day-header">
+        <div class="day-name">Terça</div>
+        <div class="day-date">26</div>
+        <div class="day-month">Maio</div>
+      </div>
+      <div class="day-slots">
+        <div class="slot">
+          <div class="slot-time">8h–10h</div>
+          <div class="slot-content">Van Gogh Museum <span class="tag confirmed">Ingresso online obrigatório</span></div>
+        </div>
+        <div class="slot">
+          <div class="slot-time">10h–12h</div>
+          <div class="slot-content">Van Gogh Museum (continuação)</div>
+        </div>
+        <div class="slot">
+          <div class="slot-time">Almoço</div>
+          <div class="slot-content">Café Museumplein</div>
+        </div>
+        <div class="slot">
+          <div class="slot-time">Tarde</div>
+          <div class="slot-content">Rijksmuseum — Rembrandt, Vermeer</div>
+        </div>
+        <div class="slot slot-night">
+          <div class="slot-time">Noite</div>
+          <div class="slot-content">Passeio de barco iluminado pelos canais</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUA 27 -->
+    <div class="day-row">
+      <div class="day-header">
+        <div class="day-name">Quarta</div>
+        <div class="day-date">27</div>
+        <div class="day-month">Maio</div>
+      </div>
+      <div class="day-slots">
+        <div class="slot">
+          <div class="slot-time">8h–10h</div>
+          <div class="slot-content">Trem → Zaanse Schans (20min) · Moinhos de vento</div>
+        </div>
+        <div class="slot">
+          <div class="slot-time">10h–12h</div>
+          <div class="slot-content">Zaanse Schans — queijaria, fábrica de tamancos</div>
+        </div>
+        <div class="slot">
+          <div class="slot-time">Almoço</div>
+          <div class="slot-content">Retorno + almoço perto do hotel</div>
+        </div>
+        <div class="slot">
+          <div class="slot-time">Tarde</div>
+          <div class="slot-content">Zaandam village + NDSM Wharf (arte de rua)</div>
+        </div>
+        <div class="slot slot-night">
+          <div class="slot-time">Noite</div>
+          <div class="slot-content">Jantar beira do rio IJ · <strong>21h A'DAM Lookout — pôr do sol 360°</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUI 28 -->
+    <div class="day-row">
+      <div class="day-header">
+        <div class="day-name">Quinta</div>
+        <div class="day-date">28</div>
+        <div class="day-month">Maio</div>
+      </div>
+      <div class="day-slots">
+        <div class="slot">
+          <div class="slot-time">8h–10h</div>
+          <div class="slot-content"><strong>Trem Amsterdã → Bruxelas · Saída 9h20</strong></div>
+        </div>
+        <div class="slot">
+          <div class="slot-time">10h–12h</div>
+          <div class="slot-content">Em viagem · Chegada Bruxelas ~11h30</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- BRUXELAS -->
+<section id="bruxelas" class="section">
+  <div class="city-badge bxl">🇧🇪 Bruxelas · Bruges · 28–30 Mai</div>
+  <h2 class="section-title">Bruxelas &amp; Bruges</h2>
+  <p class="section-subtitle">2 NOITES · ATLAS HOTEL BRUSSELS</p>
+
+  <div class="hotel-card">
+    <div class="hotel-name">Atlas Hotel Brussels</div>
+    <div class="hotel-detail">
+      <strong>Endereço</strong>
+      Rue Du Vieux Marché Aux Grains, 30, Bruxelas
+    </div>
+    <div class="hotel-detail">
+      <strong>Check-in / Check-out</strong>
+      28/05 a partir das 15h · 30/05 até 11h
+    </div>
+    <div class="hotel-detail">
+      <strong>Confirmação</strong>
+      5892.763.765 · PIN: 0739
+    </div>
+    <div class="hotel-detail">
+      <strong>Valor</strong>
+      R$ 2.471 · Café da manhã incluído
+    </div>
+  </div>
+
+  <div class="coming-soon">
+    <div class="cs-title">Roteiro em construção</div>
+    <p>Bruxelas e Bruges serão detalhados em breve neste app.</p>
+  </div>
+</section>
+
+<!-- PARIS -->
+<section id="paris" class="section">
+  <div class="city-badge par">🇫🇷 Paris · 30 Mai – 06 Jun</div>
+  <h2 class="section-title">Paris</h2>
+  <p class="section-subtitle">7 NOITES · GRAND HOTEL SAINT MICHEL</p>
+
+  <div class="hotel-card">
+    <div class="hotel-name">Grand Hotel Saint Michel</div>
+    <div class="hotel-detail">
+      <strong>Endereço</strong>
+      19 Rue Cujas, 5º arr., 75005 Paris
+    </div>
+    <div class="hotel-detail">
+      <strong>Check-in / Check-out</strong>
+      30/05 a partir das 15h · 06/06 até 12h
+    </div>
+    <div class="hotel-detail">
+      <strong>Confirmação</strong>
+      5605.944.711 · PIN: 0784
+    </div>
+    <div class="hotel-detail">
+      <strong>Valor</strong>
+      R$ 15.613 · Café da manhã incluído
+    </div>
+  </div>
+
+  <div class="coming-soon">
+    <div class="cs-title">Roteiro em construção</div>
+    <p>Paris será detalhada em breve neste app.</p>
+  </div>
+</section>
+
+<!-- INGRESSOS -->
+<section id="ingressos" class="section">
+  <p class="section-subtitle">COMPRAS E RESERVAS</p>
+  <h2 class="section-title">Ingressos</h2>
+
+  <div class="ticket-list">
+    <div class="ticket-item">
+      <div>
+        <div class="ticket-name">Heineken Experience — Amsterdã</div>
+        <div class="ticket-meta">Seg 25/05 · 16h45 · 2 pessoas</div>
+      </div>
+      <div class="ticket-status comprado">Comprado ✅</div>
+    </div>
+    <div class="ticket-item">
+      <div>
+        <div class="ticket-name">Anne Frank House — Amsterdã</div>
+        <div class="ticket-meta">Seg 25/05 · Manhã · 2 pessoas · Esgota rápido!</div>
+        <a class="ticket-link" href="https://www.annefrank.org/en/museum/tickets/" target="_blank">→ annefrank.org/tickets</a>
+      </div>
+      <div class="ticket-status comprar">Comprar</div>
+    </div>
+    <div class="ticket-item">
+      <div>
+        <div class="ticket-name">Van Gogh Museum — Amsterdã</div>
+        <div class="ticket-meta">Ter 26/05 · Manhã · 2 pessoas</div>
+        <a class="ticket-link" href="https://www.vangoghmuseum.nl/en/visit/tickets" target="_blank">→ vangoghmuseum.nl/tickets</a>
+      </div>
+      <div class="ticket-status comprar">Comprar</div>
+    </div>
+    <div class="ticket-item">
+      <div>
+        <div class="ticket-name">Rijksmuseum — Amsterdã</div>
+        <div class="ticket-meta">Ter 26/05 · Tarde · 2 pessoas</div>
+        <a class="ticket-link" href="https://www.rijksmuseum.nl/en/visit/tickets" target="_blank">→ rijksmuseum.nl/tickets</a>
+      </div>
+      <div class="ticket-status comprar">Comprar</div>
+    </div>
+    <div class="ticket-item">
+      <div>
+        <div class="ticket-name">Barco Elétrico — Amsterdã</div>
+        <div class="ticket-meta">Dom 24/05 · Manhã · 2 pessoas</div>
+        <a class="ticket-link" href="https://www.boaty.nl" target="_blank">→ boaty.nl</a>
+      </div>
+      <div class="ticket-status comprar">Reservar</div>
+    </div>
+    <div class="ticket-item">
+      <div>
+        <div class="ticket-name">A'DAM Lookout — Amsterdã</div>
+        <div class="ticket-meta">Qua 27/05 · ~21h · 2 pessoas</div>
+        <a class="ticket-link" href="https://adamlookout.com/en/tickets" target="_blank">→ adamlookout.com/tickets</a>
+      </div>
+      <div class="ticket-status comprar">Comprar</div>
+    </div>
+    <div class="ticket-item">
+      <div>
+        <div class="ticket-name">Museu do Louvre — Paris</div>
+        <div class="ticket-meta">A definir · 2 pessoas · Esgota rápido!</div>
+        <a class="ticket-link" href="https://www.louvre.fr/en/visit/tickets" target="_blank">→ louvre.fr/tickets</a>
+      </div>
+      <div class="ticket-status comprar">Comprar</div>
+    </div>
+    <div class="ticket-item">
+      <div>
+        <div class="ticket-name">Torre Eiffel — Paris</div>
+        <div class="ticket-meta">A definir · 2 pessoas</div>
+        <a class="ticket-link" href="https://tickets.toureiffel.paris/en" target="_blank">→ toureiffel.paris/tickets</a>
+      </div>
+      <div class="ticket-status comprar">Comprar</div>
+    </div>
+    <div class="ticket-item">
+      <div>
+        <div class="ticket-name">Palácio de Versalhes — Paris</div>
+        <div class="ticket-meta">A definir · 2 pessoas</div>
+        <a class="ticket-link" href="https://chateauversailles.fr/en/plan-your-visit/tickets" target="_blank">→ chateauversailles.fr/tickets</a>
+      </div>
+      <div class="ticket-status comprar">Comprar</div>
+    </div>
+    <div class="ticket-item">
+      <div>
+        <div class="ticket-name">Disneyland Paris</div>
+        <div class="ticket-meta">A definir · 2 pessoas · Dia inteiro</div>
+        <a class="ticket-link" href="https://www.disneylandparis.com/en-gb/tickets/" target="_blank">→ disneylandparis.com/tickets</a>
+      </div>
+      <div class="ticket-status comprar">Comprar</div>
+    </div>
+  </div>
+</section>
+
+<!-- ORÇAMENTO -->
+<section id="orcamento" class="section">
+  <p class="section-subtitle">RESUMO FINANCEIRO</p>
+  <h2 class="section-title">Orçamento</h2>
+
+  <div class="budget-grid">
+    <div class="budget-card">
+      <div class="budget-label">Amsterdã · Hotel</div>
+      <div class="budget-value">R$ 10.701</div>
+      <div class="budget-sub">5 noites · 2 pessoas</div>
+    </div>
+    <div class="budget-card">
+      <div class="budget-label">Bruxelas · Hotel</div>
+      <div class="budget-value">R$ 2.471</div>
+      <div class="budget-sub">2 noites · 2 pessoas</div>
+    </div>
+    <div class="budget-card">
+      <div class="budget-label">Paris · Hotel</div>
+      <div class="budget-value">R$ 15.613</div>
+      <div class="budget-sub">7 noites · 2 pessoas</div>
+    </div>
+    <div class="budget-card budget-total">
+      <div class="budget-label">Total Hotéis</div>
+      <div class="budget-value">R$ 28.785</div>
+      <div class="budget-sub">Café da manhã incluído nos 3</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="coming-soon">
+    <div class="cs-title">Ingressos e despesas</div>
+    <p>Será atualizado conforme as compras forem realizadas.</p>
+  </div>
+</section>
+
+<script>
+  function show(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
